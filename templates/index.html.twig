@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+	<h1>Page d'accueil</h1>
+	<p>Ceci est la page d'accueil du site</p>
+	
+	{# commentaires twig #}
+
+	{# pour afficher ue variable : #}
+	{#
+	{{ mavariable }}
+	#}
+
+	{# boucle #}
+	{#
+	{% for article in articles %}
+
+	{% endfor %}
+	#}
+
+	{# condition #}
+	{#
+	{% if mavariable == 'toto' %}
+
+	{% endif %}
+	#}
+
+	<p>Bonjour {{nom}}</p>
+
+	<a href="{{ path('bonjour') }}">Lien vers la page bonjour</a>
+
+
+</body>
+</html>

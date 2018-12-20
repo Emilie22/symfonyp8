@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<h2>Exercice 2</h2>
+<p>Nous sommes le {{date}}, il est {{heure}}</p>
+
+<!-- path() permet de générer dynamiquement le bon lien -->
+<a href="{{ path('bonjour') }}">bonjour</a>
+<!-- on veut passer des paramètres à notre route -->
+<a href="{{ path('bonjourNom', {nom: 'tata'}) }}">bonjour2</a>
+
+</body>
+</html>
