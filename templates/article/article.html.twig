@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article {{ article.id }}{% endblock %}
+
+{% block body %}
+	<article>
+		<h3>{{ article.title }}</h3>
+		publié le {{ article.datepubli|date('d/m/Y') }}
+		par {{ article.author }}
+		<p>{{ article.content }}</p>
+	</article>
+{% endblock %}
