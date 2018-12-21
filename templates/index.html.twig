@@ -6,11 +6,11 @@
 <body>
 
 	<a href="{{ path('home') }}">Home</a>
-	<a href="{{ path('bonjour') }}">Bonjour</a>
-	<a href="{{ path('bonjourNom', {nom: 'emilie'}) }}">BonjourNom</a>
-	<a href="{{ path('cava') }}">Comment-allez-vous ?</a>
-	<a href="{{ path('heure') }}">Heure</a>
-	<a href="{{ path('exo3', {age: 33, pseudo: 'emilie'}) }}">Exo3</a>
+	<a href="{{ path('bonjour') }}">Lien vers la page bonjour</a>
+	<a href="{{ path('bonjourNom', {nom: 'emilie'}) }}">Lien vers la page bonjourNom</a>
+	<a href="{{ path('cava') }}">Lien vers la page cava ?</a>
+	<a href="{{ path('heure') }}">Lien vers la page heure</a>
+	<a href="{{ path('exo3', {age: 33, pseudo: 'emilie'}) }}">Lien vers la page exo3</a>
 
 	<h1>Page d'accueil</h1>
 	<p>Ceci est la page d'accueil du site</p>
@@ -38,7 +38,6 @@
 
 	<p>Bonjour {{nom}}</p>
 
-	<a href="{{ path('bonjour') }}">Lien vers la page bonjour</a>
 
 
 </body>
