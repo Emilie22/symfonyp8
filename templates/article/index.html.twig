@@ -4,8 +4,6 @@
 
 {% block body %}
 
-	{# {{ dump(articles) }} #}
-
 	{% for article in articles %}
 		<article>
 			<h3>{{ article.title }}</h3>
@@ -13,6 +11,7 @@
 			{# ici title et datepubli sont les getter #}
 			{# datepubli est un objet #}
 			<a href="{{ path('showArticle', {id: article.id}) }}">Voir</a>
+			<a href="{{ path('updateArticle', {id: article.id}) }}">Modifier</a>
 		</article>
 	{% endfor %}
 

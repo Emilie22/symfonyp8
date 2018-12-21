@@ -80,4 +80,27 @@ class ArticleController extends AbstractController
 
 		return $this->render('article/recent.html.twig', ['articles'=>$articles, 'articles2'=>$articles2]);
 	}
+
+
+	/**
+	* @Route("article/update/{id}", name="updateArticle", requirements={"id"="\d+"})
+	*/
+	public function updateArticle($id) {
+		$repository = $this->getDoctrine()->getRepository(Article::class);
+		$article = $repository->find($id);
+		if (!$article) {
+			throw $this->createNotFoundException('No article found');
+		}
+		$article->setContent('contenu modifié');
+		// récupération de l'entity manager pour pouvoir faire l'update
+		$entityManager = $this->getDoctrine()->getManager();
+		// pas besoin de faire ->persist($article) car l'article a été récupéré de la base,
+		// doctrine le connait déjà
+		$entityManager->flush();
+		// création d'un message flash : stocké dans la session il sera supprimé dès qu'il sera affiché
+		// donc affiché qu'une seule fois
+		$this->addFlash('success', 'article modifié');
+		// je redirige vers la page détail de l'article
+		return $this->redirectToRoute('showArticle', ['id'=>$article->getId()]);		
+	}
 }
