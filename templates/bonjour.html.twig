@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+{% extends 'base.html.twig' %}
 
-<a href="{{ path('home') }}">Home</a>
-<a href="{{ path('bonjour') }}">Bonjour</a>
-<a href="{{ path('bonjourNom', {nom: 'emilie'}) }}">BonjourNom</a>
-<a href="{{ path('cava') }}">Comment-allez-vous ?</a>
-<a href="{{ path('heure') }}">Heure</a>
-<a href="{{ path('exo3', {age: 33, pseudo: 'emilie'}) }}">Exo3</a>
+{% block title %}Bonjour {{pseudo}}{% endblock %}
+
+{% block body %}
 
 <h2>Bonjour pseudo</h2>
 <p>Bonjour {{pseudo}}</p>
 
-</body>
-</html>
+{% endblock %}

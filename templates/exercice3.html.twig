@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+{% extends 'base.html.twig' %}
 
-<a href="{{ path('home') }}">Home</a>
-<a href="{{ path('bonjour') }}">Bonjour</a>
-<a href="{{ path('bonjourNom', {nom: 'emilie'}) }}">BonjourNom</a>
-<a href="{{ path('cava') }}">Comment-allez-vous ?</a>
-<a href="{{ path('heure') }}">Heure</a>
-<a href="{{ path('exo3', {age: 33, pseudo: 'emilie'}) }}">Exo3</a>
+{% block title %}Page exercice3{% endblock %}
+
+{% block body %}
 
 <p>Bonjour {{pseudo}}, tu as {{age}} an{% if age > 1 %}s{% endif %}.</p>
 
-</body>
-</html>
+{% endblock %}
+
+{# si j'ai besoin d'un fichier javascript uniquement sur cette page, je déclare le block #}
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset ('js/jquery.ui.min.js') }}"></script>
+{% endblock %}

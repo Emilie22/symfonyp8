@@ -1,24 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+{% extends 'base.html.twig' %}
 
-<a href="{{ path('home') }}">Home</a>
-<a href="{{ path('bonjour') }}">Bonjour</a>
-<a href="{{ path('bonjourNom', {nom: 'emilie'}) }}">BonjourNom</a>
-<a href="{{ path('cava') }}">Comment-allez-vous ?</a>
-<a href="{{ path('heure') }}">Heure</a>
-<a href="{{ path('exo3', {age: 33, pseudo: 'emilie'}) }}">Exo3</a>
+{% block title %}Quelle heure est-il ?{% endblock %}
+
+{% block body %}
 	
 <h2>Exercice 2</h2>
 <p>Nous sommes le {{date}}, il est {{heure}}</p>
 
 <!-- path() permet de générer dynamiquement le bon lien -->
-<a href="{{ path('bonjour') }}">bonjour</a>
+{# <a href="{{ path('bonjour') }}">bonjour</a> #}
 <!-- on veut passer des paramètres à notre route -->
-<a href="{{ path('bonjourNom', {nom: 'tata'}) }}">bonjour2</a>
+{# <a href="{{ path('bonjourNom', {nom: 'tata'}) }}">bonjour2</a> #}
 
-</body>
-</html>
+{% endblock %}
