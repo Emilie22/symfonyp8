@@ -4,7 +4,12 @@
 
 {% block body %}
 	
-<h2>Exercice 2</h2>
+<h2>Quelle heure est-il ?</h2>
+
+{# affichage de la vue qui contient le code bonjour ca va ? #}
+{# si mon template a besoin d'une variable, je la passe ne paramètre d'include #}
+{{ include('inc/bonjour.html.twig', {pseudo:'Emilie'}) }}
+
 <p>Nous sommes le {{date}}, il est {{heure}}</p>
 
 <!-- path() permet de générer dynamiquement le bon lien -->
