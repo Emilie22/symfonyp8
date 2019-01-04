@@ -33,7 +33,7 @@ class Article
 
     /**
      * je décris ma relation
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="articles")
      */
     private $user;
 

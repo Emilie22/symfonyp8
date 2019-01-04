@@ -30,6 +30,9 @@ class ArticleController extends AbstractController
     */
     public function addArticle(Request $request) {
 
+    	// seul un utilisateur connecté peut ajouter un article
+    	$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
     	// pour pouvoir sauvegarder un objet = insérer les infos dans la table, 
     	// on utilise l'entity manager
     	$entityManager = $this->getDoctrine()->getManager();
@@ -57,6 +60,10 @@ class ArticleController extends AbstractController
     	$form->handleRequest($request);
     	if ($form->isSubmitted() && $form->isValid()) {
     		$article = $form->getData();
+    		// l'auteur de l'article est l'utilisateur connecté
+    		$article->setUser($this->getUser()); // permet de récupérer l'utilisateur connecté
+    		// je fixe la date de publication de l'article
+    		$article->setDatePubli(new \DatetTime(date('Y-m-d H:i:s')));
     		$entityManager->persist($article);
     		$entityManager->flush();
     		$this->addFlash('success', 'article ajouté');

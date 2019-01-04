@@ -17,8 +17,6 @@ class ArticleType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, ['label'=>'Intitulé de l\'article'])
-            ->add('date_publi', DateTimeType::class, ['label'=>'Date de publication'])
-            ->add('author', TextType::class, ['label'=>'Auteur de l\'article'])
             ->add('content', TextareaType::class, ['label'=>'Contenu de l\'article'])
             ->add('enregistrer', SubmitType::class, ['attr'=>['class'=>'btn-info']])
         ;

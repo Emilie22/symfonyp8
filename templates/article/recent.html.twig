@@ -7,7 +7,7 @@
 	{% for article in articles %}
 		<article>
 			<h3>{{ article.title }}</h3>
-			publié le {{ article.date_publi }}
+			publié par {{ article.username }} le {{ article.date_publi }}
 			{# article est un tableau article['date_publi'] contient la date au format datetime #}
 			<a href="{{ path('showArticle', {id: article.id}) }}">Voir</a>
 		</article>
@@ -16,7 +16,7 @@
 	{% for article2 in articles2 %}
 		<article>
 			<h3>{{ article2.title }}</h3>
-			publié le {{ article2.datepubli|date('d/m/Y') }}
+			publié par {{ article2.user.username }} le {{ article2.datepubli|date('d/m/Y') }}
 			<a href="{{ path('showArticle', {id: article2.id}) }}">Voir</a>
 		</article>
 	{% endfor %}

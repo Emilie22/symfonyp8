@@ -52,7 +52,12 @@ class ArticleRepository extends ServiceEntityRepository
         // on récupère l'équivalent de l'objet de connexion à PDO que l'on utilisait
         $connexion = $this->getEntityManager()->getConnection();
         // on stocke la requête dans une variable
-        $sql = 'SELECT * FROM article WHERE date_publi > :datePost ORDER BY date_publi DESC';
+        $sql = 'SELECT a.id as idArticle, title, content, date_publi, u.*
+                FROM article a
+                INNER JOIN user u 
+                ON a.user_id = u.id 
+                WHERE date_publi > :datePost
+                ORDER BY date_publi DESC';
         $select = $connexion->prepare($sql);
         $select->bindValue(':datePost', $datePost);
         $select->execute();

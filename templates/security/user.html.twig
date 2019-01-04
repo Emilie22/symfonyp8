@@ -13,4 +13,12 @@
     {{ dump(app.user) }}
     <p>Bonjour {{ app.user.username }}, {{ app.user.email }}</p>
 
+    {# si je veux afficher les articles de l'utilisateur #}
+    {% for article in app.user.articles %}
+    	<article>
+    		{{ article.title }}<br>
+    		publié le {{ article.datepubli|date('d/m/Y') }}
+    	</article>
+    {% endfor %}
+
 {% endblock %}

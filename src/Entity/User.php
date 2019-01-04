@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -43,6 +45,18 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=30)
      */
     private $username;
+
+    /**
+    * je vais indiquer à doctrine que je veux inverser la relation User / Article
+    * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="user")
+    */
+    private $articles;
+
+    public function __construct() {
+        // on initialise la propriété articles lors de l'instanciation
+        // ArrayCollection se comporte comme un tableau
+        $this->articles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -139,5 +153,10 @@ class User implements UserInterface
         $this->plainPassword = $plainPassword;
 
         return $this;
+    }
+
+    // getter pour notre propriété articles
+    public function getArticles(): Collection {
+        return $this->articles;
     }
 }
