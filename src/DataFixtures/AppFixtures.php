@@ -47,6 +47,8 @@ class AppFixtures extends Fixture
             $users[] = $user;
         }
 
+        // je crée un tableau vide $categories
+        $categories = [];
         // on va créer 10 catégories
         for ($i = 1; $i <= 10; $i++) {
         	$categorie = new Categorie();
@@ -55,6 +57,9 @@ class AppFixtures extends Fixture
         	$categorie->setDateCreation(new \DateTime(date('Y-m-d H:i:s')));
 
         	$manager->persist($categorie);
+
+            // je remplis mon tableau $categories à chaque tour de boucle
+            $categories[] = $categorie;
         }
 
         // on va créer 50 articles
@@ -68,8 +73,9 @@ class AppFixtures extends Fixture
         	$randomDate = date('Y-m-d H:i:s', $timestamp);
         	$article->setDatePubli(new \DateTime($randomDate));
         	
-        	// array_rand choisit au hasard une clé dans un tableau (le tableau $users)
-        	$article->setUser($users[array_rand($users)]);
+        	// array_rand choisit au hasard une clé dans un tableau (le tableau $users ou $categories)
+            $article->setUser($users[array_rand($users)]);
+        	$article->setCategorie($categories[array_rand($categories)]);
 
         	$manager->persist($article);
         }

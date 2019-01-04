@@ -11,24 +11,27 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Entity\Categorie;
+use App\Entity\User;
+use App\Form\ArticleType;
 
-class ArticleType extends AbstractType
+class AdminArticleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, ['label'=>'Intitulé de l\'article'])
-            ->add('content', TextareaType::class, ['label'=>'Contenu de l\'article'])
-            ->add('categorie', EntityType::class, ['class' => Categorie::class, 'choice_label' => 'libelle'])
+            ->add('article', ArticleType::class, [
+                'data_class' => Article::class
+            ])
+            ->add('date_publi', DateTimeType::class, ['label'=>'Date de publication'])
+            ->add('user', EntityType::class, ['class' => User::class, 'choice_label' => 'username'])
+            ->add('save', SubmitType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Article::class,
-            'inherit_data' => true,
+            'data_class' => Article::class
         ]);
     }
 }

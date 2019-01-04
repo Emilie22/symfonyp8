@@ -45,6 +45,12 @@ class Article
      */
     private $content;
 
+    /**
+     * je décris ma relation
+     * @ORM\ManyToOne(targetEntity="App\Entity\Categorie", inversedBy="articles")
+     */
+    private $categorie;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,6 +101,19 @@ class Article
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie // on récupère maintenant un objet de classe User
+    // pas besoin de use car User est dans le même namespace que Article (App\Entity)
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(Categorie $categorie): self
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }

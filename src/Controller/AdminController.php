@@ -5,6 +5,9 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\AdminArticleType;
+use App\Entity\Article;
 
 class AdminController extends AbstractController
 {
@@ -40,5 +43,38 @@ class AdminController extends AbstractController
     	return $this->render('admin/index.html.twig', [
             'controller_name' => 'AdminController',
         ]);
+    }
+
+    /**
+    * @Route("/admin/article/add", name="addArticleAdmin")
+    */
+    public function addArticleAdmin(Request $request) {
+        $form = $this->createForm(AdminArticleType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $article = $form->getData();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($article);
+            $entityManager->flush();
+            $this->addFlash('success', 'article ajouté');
+            return $this->redirectToRoute('admin');
+        }
+        return $this->render('admin/add_article.html.twig', ['form'=>$form->createView()]);
+    }
+
+    /**
+    * @Route("/admin/article/update/{id}", name="updateArticleAdmin", requirements={"id"="\d+"})
+    */
+    public function updateArticleAdmin(Request $request, Article $article) {
+        $form = $this->createForm(AdminArticleType::class, $article);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $article = $form->getData();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+            $this->addFlash('success', 'article modifié');
+            return $this->redirectToRoute('articles');
+        }   
+        return $this->render('admin/update_article.html.twig', ['form'=>$form->createView()]);
     }
 }

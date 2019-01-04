@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
 use Symfony\Component\HttpFoundation\Request;
-use App\Form\ArticleType;
+use App\Form\ArticleUserType;
 
 class ArticleController extends AbstractController
 {
@@ -56,14 +56,14 @@ class ArticleController extends AbstractController
 
     	return $this->render('article/add.html.twig');*/
     	
-    	$form = $this->createForm(ArticleType::class);
+    	$form = $this->createForm(ArticleUserType::class);
     	$form->handleRequest($request);
     	if ($form->isSubmitted() && $form->isValid()) {
     		$article = $form->getData();
     		// l'auteur de l'article est l'utilisateur connecté
     		$article->setUser($this->getUser()); // permet de récupérer l'utilisateur connecté
     		// je fixe la date de publication de l'article
-    		$article->setDatePubli(new \DatetTime(date('Y-m-d H:i:s')));
+    		$article->setDatePubli(new \DateTime(date('Y-m-d H:i:s')));
     		$entityManager->persist($article);
     		$entityManager->flush();
     		$this->addFlash('success', 'article ajouté');
@@ -130,7 +130,7 @@ class ArticleController extends AbstractController
 			throw $this->createNotFoundException('No article found');
 		}
 		$entityManager = $this->getDoctrine()->getManager();
-		$form = $this->createForm(ArticleType::class, $article);
+		$form = $this->createForm(ArticleUserType::class, $article);
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$article = $form->getData();
