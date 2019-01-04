@@ -5,6 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\ArticleType;
 
 class ArticleController extends AbstractController
 {
@@ -16,7 +18,7 @@ class ArticleController extends AbstractController
     {
     	// récupération de la liste des articles
     	$repository = $this->getDoctrine()->getRepository(Article::class);
-    	$articles = $repository->findAll();
+    	$articles = $repository->myFindAll();
 
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
@@ -26,7 +28,7 @@ class ArticleController extends AbstractController
     /**
     * @Route("/article/add", name="addArticle")
     */
-    public function addArticle() {
+    public function addArticle(Request $request) {
 
     	// pour pouvoir sauvegarder un objet = insérer les infos dans la table, 
     	// on utilise l'entity manager
@@ -34,7 +36,7 @@ class ArticleController extends AbstractController
 
     	// on crée notre objet article, pour l'instant en dur
     	$article = new Article();
-    	$article->setTitle('mon premier article');
+    	/*$article->setTitle('mon premier article');
     	$article->setContent('zedfézhdfzdhezofyuozaeufz');
     	// on doit envoyer un objet de classe datetime puisqu'on a créé notre propriété 
     	// date_publi au format datetime
@@ -47,7 +49,20 @@ class ArticleController extends AbstractController
     	// pour exécuter les requêtes sql
     	$entityManager->flush();
 
-    	return $this->render('article/add.html.twig');
+    	$this->addFlash('success', 'article ajouté');
+
+    	return $this->render('article/add.html.twig');*/
+    	
+    	$form = $this->createForm(ArticleType::class);
+    	$form->handleRequest($request);
+    	if ($form->isSubmitted() && $form->isValid()) {
+    		$article = $form->getData();
+    		$entityManager->persist($article);
+    		$entityManager->flush();
+    		$this->addFlash('success', 'article ajouté');
+    		return $this->redirectToRoute('articles');
+    	}
+    	return $this->render('article/add.html.twig', ['form'=>$form->createView()]);
     }
 
  	// Créer une page qui va afficher les détails d'un article.
@@ -85,7 +100,7 @@ class ArticleController extends AbstractController
 	/**
 	* @Route("article/update/{id}", name="updateArticle", requirements={"id"="\d+"})
 	*/
-	public function updateArticle($id) {
+	/*public function updateArticle($id) {
 		$repository = $this->getDoctrine()->getRepository(Article::class);
 		$article = $repository->find($id);
 		if (!$article) {
@@ -102,5 +117,45 @@ class ArticleController extends AbstractController
 		$this->addFlash('success', 'article modifié');
 		// je redirige vers la page détail de l'article
 		return $this->redirectToRoute('showArticle', ['id'=>$article->getId()]);		
+	}*/
+	public function updateArticle(Request $request, Article $article) {
+	    if (!$article) {
+			throw $this->createNotFoundException('No article found');
+		}
+		$entityManager = $this->getDoctrine()->getManager();
+		$form = $this->createForm(ArticleType::class, $article);
+		$form->handleRequest($request);
+		if ($form->isSubmitted() && $form->isValid()) {
+			$article = $form->getData();
+			$entityManager->flush();
+			$this->addFlash('success', 'article modifié');
+			return $this->redirectToRoute('articles');
+		}	
+		return $this->render('article/add.html.twig', ['form'=>$form->createView()]);
+	}
+
+
+	/**
+	* @Route("/article/delete/{id}", name="deleteArticle", requirements={"id"="\d+"})
+	*/
+	//public function deleteArticle($id) {
+	//	$repository = $this->getDoctrine()->getRepository(Article::class);
+	//	$article = $repository->find($id);
+	//}
+	// Le param converter : on explique à Symfony que l'on veut convertir directement l'id (dans l'url)
+	// en objet de classe Article en mettant le nom de la classe dans les parenthèses
+	// Il n'est plus utile de faire le getRepository/find
+	public function deleteArticle(Article $article) {
+		// récupération de l'entity manager, nécessaire pour la suppression
+		$entityManager = $this->getDoctrine()->getManager();
+		// je veux supprimer cet article
+		$entityManager->remove($article);
+		// pour valider la suppression
+		$entityManager->flush();
+
+		// génération d'un message flash
+		$this->addFlash('warning', 'Article supprimé'); // ici c'est nous qui nommons warning
+		// redirection vers la liste des articles
+		return $this->redirectToRoute('articles');
 	}
 }

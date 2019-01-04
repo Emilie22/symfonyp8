@@ -63,11 +63,26 @@ class ArticleRepository extends ServiceEntityRepository
     // même méthode en objet
     public function findAllPostedAfter2($datePost) {
         $queryBuilder = $this->createQueryBuilder('a')
+            ->innerJoin('a.user', 'u')
+            ->addSelect('u')
             ->andWhere('a.date_publi > :datePost')
             ->setParameter('datePost', $datePost)
             ->orderBy('a.date_publi', 'DESC')
             ->getQuery();
         return $queryBuilder->execute();
+    }
 
+    // méthode qui va me permettre de récupérer ma liste d'articles et mes utilisateurs
+    // en une sule requête, en faisant une jointure
+    public function myFindAll() {
+        $queryBuilder = $this->createQueryBuilder('a')
+            // je fais la jointure
+            // a.user représente la propriété user de mon entité article
+            ->innerJoin('a.user', 'u')
+            // on récupère ici les données de l'utilisateur associé à l'article
+            ->addSelect('u')
+            ->orderBy('a.date_publi', 'DESC')
+            ->getQuery();
+        return $queryBuilder->execute();    
     }
 }

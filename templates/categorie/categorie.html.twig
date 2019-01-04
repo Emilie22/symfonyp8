@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégorie {{categorie.id }}{% endblock %}
+
+{% block body %}
+	
+	<article>
+		<h3>{{ categorie.libelle }}</h3>
+		<p>{{ categorie.description }}</p>
+		<p>créée le {{ categorie.datecreation|date('d/m/Y') }}</p>
+	</article>
+
+{% endblock %}

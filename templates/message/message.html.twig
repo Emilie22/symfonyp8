@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Article {{ article.id }}{% endblock %}
+{% block title %}{{ message.sujet }}{% endblock %}
 
 {% block body %}
 
@@ -10,11 +10,11 @@
 			{{ message }}
 		</div>
 	{% endfor %}
-	
-	<article>
-		<h3>{{ article.title }}</h3>
-		publié le {{ article.datepubli|date('d/m/Y') }}
-		par {{ article.user.username }}
-		<p>{{ article.content }}</p>
-	</article>
+
+	<div>
+		<h3>{{message.sujet}}</h3>
+		<p>{{message.contenu}}</p>
+		<p>envoyé par {{message.nom}} ({{ message.email }}), le {{message.dateenvoi|date('d/mY')}}</p>
+	</div>
+
 {% endblock %}

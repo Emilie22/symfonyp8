@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+
+    {{ dump(moi) }}
+
+    <p>pseudo : {{ moi.username }}</p>
+    <p>email : {{ moi.email }}</p>
+
+    {# on peut directement accéder à l'utilisateur connecté dans n'importe quelle vue twig grâce à app.user #}
+    {{ dump(app.user) }}
+    <p>Bonjour {{ app.user.username }}, {{ app.user.email }}</p>
+
+{% endblock %}

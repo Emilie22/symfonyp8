@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Repository;
+
+use App\Entity\Categorie;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
+/**
+ * @method Categorie|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Categorie|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Categorie[]    findAll()
+ * @method Categorie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+class CategorieRepository extends ServiceEntityRepository
+{
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, Categorie::class);
+    }
+
+    // /**
+    //  * @return Categorie[] Returns an array of Categorie objects
+    //  */
+    /*
+    public function findByExampleField($value)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('c.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    */
+
+    /*
+    public function findOneBySomeField($value): ?Categorie
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    */
+
+    // méthode qui récupère les 5 catégories les plus récentes
+    public function getLastFive() {
+        /*
+        $queryBuilder = $this->createQueryBuilder('c')
+            ->orderBy('c.date_creation', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery();
+        // renvoie un tableau d'objets Categorie
+        return $queryBuilder->execute(); // avec le querybuilder, execute fait en même temps le fetchAll
+        */
+        // ou :
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.date_creation', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+    }
+}

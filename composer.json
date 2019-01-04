@@ -10,10 +10,15 @@
         "symfony/console": "4.2.*",
         "symfony/debug": "4.2.*",
         "symfony/dotenv": "4.2.*",
+        "symfony/expression-language": "4.2.*",
         "symfony/flex": "^1.1",
+        "symfony/form": "4.2.*",
         "symfony/framework-bundle": "4.2.*",
         "symfony/orm-pack": "^1.0",
+        "symfony/security-bundle": "4.2.*",
         "symfony/twig-bundle": "4.2.*",
+        "symfony/validator": "4.2.*",
+        "symfony/var-dumper": "4.2.*",
         "symfony/yaml": "4.2.*"
     },
     "config": {
@@ -62,8 +67,9 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.1",
+        "symfony/debug-pack": "^1.0",
         "symfony/maker-bundle": "^1.11",
-        "symfony/var-dumper": "4.2.*",
         "symfony/web-server-bundle": "4.2.*"
     }
 }

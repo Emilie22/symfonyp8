@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajout d'articles{% endblock %}
+{% block title %}Envoi de messages{% endblock %}
 
 {% block body %}
+	<h2>Envoyer un message</h2>
 	{{ form_start(form) }}
 		{{ form_widget(form) }}
+		<button class="btn btn-info">Envoyer</button>
 	{{ form_end(form) }}
 {% endblock %}
