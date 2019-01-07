@@ -8,8 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Categorie;
 
@@ -21,6 +20,7 @@ class ArticleType extends AbstractType
             ->add('title', TextType::class, ['label'=>'Intitulé de l\'article'])
             ->add('content', TextareaType::class, ['label'=>'Contenu de l\'article'])
             ->add('categorie', EntityType::class, ['class' => Categorie::class, 'choice_label' => 'libelle'])
+            ->add('image', FileType::class)
         ;
     }
 

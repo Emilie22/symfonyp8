@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Catégorie {{categorie.id }}{% endblock %}
+{% block title %}{{ categorie.libelle }}{% endblock %}
 
 {% block body %}
 	
@@ -8,6 +8,13 @@
 		<h3>{{ categorie.libelle }}</h3>
 		<p>{{ categorie.description }}</p>
 		<p>créée le {{ categorie.datecreation|date('d/m/Y') }}</p>
+		{# categorie.articles contient un tableau d'articles liés à cette catégorie #}
+		Il y a {{ categorie.articles|length }} articles dans cette catégorie :
+		<ul>
+		{% for article in categorie.articles %}
+			<li><a href="{{ path('showArticle', {id:article.id}) }}">{{ article.title }}</a> | {{ article.user.username }} | {{ article.datepubli|date('d/m/Y') }}</li>
+		{% endfor %}
+		</ul>
 	</article>
 
 {% endblock %}

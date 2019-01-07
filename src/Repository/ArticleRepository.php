@@ -78,14 +78,16 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     // méthode qui va me permettre de récupérer ma liste d'articles et mes utilisateurs
-    // en une sule requête, en faisant une jointure
+    // en une seule requête, en faisant une jointure
     public function myFindAll() {
         $queryBuilder = $this->createQueryBuilder('a')
             // je fais la jointure
             // a.user représente la propriété user de mon entité article
             ->innerJoin('a.user', 'u')
+            ->innerJoin('a.categorie', 'c')
             // on récupère ici les données de l'utilisateur associé à l'article
             ->addSelect('u')
+            ->addSelect('c')
             ->orderBy('a.date_publi', 'DESC')
             ->getQuery();
         return $queryBuilder->execute();    

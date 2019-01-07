@@ -94,6 +94,9 @@ class Categorie
     }
 
     // getter pour notre propriété articles
+    /**
+    * @Return Collection|Article[]
+    */
     public function getArticles(): Collection {
         return $this->articles;
     }

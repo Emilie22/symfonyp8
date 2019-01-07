@@ -60,6 +60,16 @@ class ArticleController extends AbstractController
     	$form->handleRequest($request);
     	if ($form->isSubmitted() && $form->isValid()) {
     		$article = $form->getData();
+
+    		// $article->getImage() contient un objet qui représente le fichier image envoyé
+    		$file = $article->getImage();
+    		// génération du nom de fichier
+    		$filename = md5(uniqid()) . '.' . $file->guessExtension();
+    		// on transfère le fichier sur le serveur
+    		$file->move($this->getParameter('article_image_directory'), $filename);
+    		// je remplace l'attribut image qui contient toujours le fichier par le nom du fichier
+    		$article->setImage($filename);
+
     		// l'auteur de l'article est l'utilisateur connecté
     		$article->setUser($this->getUser()); // permet de récupérer l'utilisateur connecté
     		// je fixe la date de publication de l'article

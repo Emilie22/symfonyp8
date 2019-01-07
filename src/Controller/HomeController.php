@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 // pour pouvoir utiliser les annotations :
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 // pour pouvoir utiliser la méthode render et autres méthodes utiles
 // on hérite de la classe AbstractController
@@ -109,4 +110,21 @@ class HomeController extends AbstractController {
 	//						/exercice3/33/toto
 
 
+
+	/**
+	* Page test pour accéder à get ou post
+	* @Route("/test-get", name="test-get")
+	*/
+	public function testGet(Request $request) {
+		// pour accéder à $_GET
+		$get = $request->query->all();
+		// pour accéder à $_POST
+		$post = $request->request->all();
+		// pour accéder à $_FILES
+		$files = $request->files->all();
+		// si j'attends un paramètre message ?message=jhgjgj
+		$message = $request->query->get('message', 'pas de message'); // si pas de $_GET['message'], cela vaudra 'pas de message'
+		dump($get);
+		return $this->render('test.request.html.twig', ['message' => $message]);
+	}
 }

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateur {user.id}{% endblock %}
+
+{% block body %}
+
+
+	<p>{{ user.username }} | {{ user.email }}</p>
+	<p>Liste des articles de cet utilisateur :</p>
+	{% for article in user.articles %}
+		<p>{{ article.title }} | {{ article.user.username }} | {{ article.datepubli|date('d/m/Y') }} | {{ article.content }}</p>
+	{% endfor %}
+
+{% endblock %}
