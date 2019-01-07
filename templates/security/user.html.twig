@@ -4,13 +4,20 @@
 
 {% block body %}
 
-    {{ dump(moi) }}
+    {# {{ dump(moi) }} #}
 
     <p>pseudo : {{ moi.username }}</p>
     <p>email : {{ moi.email }}</p>
 
+    <form method="POST" enctype="multipart/form-data">
+        <label>Ajouter votre photo</label>
+        <input type="file" name="photo">
+    </form>
+
+    {% if not empty($request->files->all()) %}
+
     {# on peut directement accéder à l'utilisateur connecté dans n'importe quelle vue twig grâce à app.user #}
-    {{ dump(app.user) }}
+    {# {{ dump(app.user) }} #}
     <p>Bonjour {{ app.user.username }}, {{ app.user.email }}</p>
 
     {# si je veux afficher les articles de l'utilisateur #}

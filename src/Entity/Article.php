@@ -53,7 +53,6 @@ class Article
 
     /**
     * @ORM\Column(type="string")
-    * @Assert\NotBlank(message="Envoyez une image svp")
     * @Assert\Image
     */
     private $image;

@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\ArticleUserType;
+use Symfony\Component\HttpFoundation\File\File;
+use App\Service\FileUploader;
 
 class ArticleController extends AbstractController
 {
@@ -28,7 +30,7 @@ class ArticleController extends AbstractController
     /**
     * @Route("/article/add", name="addArticle")
     */
-    public function addArticle(Request $request) {
+    public function addArticle(Request $request, FileUploader $fileuploader) {
 
     	// seul un utilisateur connecté peut ajouter un article
     	$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -37,8 +39,6 @@ class ArticleController extends AbstractController
     	// on utilise l'entity manager
     	$entityManager = $this->getDoctrine()->getManager();
 
-    	// on crée notre objet article, pour l'instant en dur
-    	$article = new Article();
     	/*$article->setTitle('mon premier article');
     	$article->setContent('zedfézhdfzdhezofyuozaeufz');
     	// on doit envoyer un objet de classe datetime puisqu'on a créé notre propriété 
@@ -63,10 +63,9 @@ class ArticleController extends AbstractController
 
     		// $article->getImage() contient un objet qui représente le fichier image envoyé
     		$file = $article->getImage();
-    		// génération du nom de fichier
-    		$filename = md5(uniqid()) . '.' . $file->guessExtension();
-    		// on transfère le fichier sur le serveur
-    		$file->move($this->getParameter('article_image_directory'), $filename);
+
+    		$filename = $file ? $fileuploader->upload($file) : '';
+
     		// je remplace l'attribut image qui contient toujours le fichier par le nom du fichier
     		$article->setImage($filename);
 
@@ -135,15 +134,28 @@ class ArticleController extends AbstractController
 		// je redirige vers la page détail de l'article
 		return $this->redirectToRoute('showArticle', ['id'=>$article->getId()]);		
 	}*/
-	public function updateArticle(Request $request, Article $article) {
+	public function updateArticle(Request $request, Article $article, FileUploader $fileuploader) {
 	    if (!$article) {
 			throw $this->createNotFoundException('No article found');
 		}
-		$entityManager = $this->getDoctrine()->getManager();
+		// je stocke le nom du fichier image au cas où aucun fichier n'ait été envoyé
+		$filename = $article->getImage();
+		// on remplace le nom du fichier image par une instance de file représentant le fichier pour pouvoir générer le formulaire
+		if ($article->getImage()) {
+			$article->setImage(new File($this->getParameter('article_image_directory') . '/' . $filename));
+		}
 		$form = $this->createForm(ArticleUserType::class, $article);
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$article = $form->getData();
+			// je ne fais le traitement que si une image a été envoyée
+			if ($article->getImage()) {
+				// je récupère le fichier 
+				$file = $article->getImage();
+				$filename = $fileuploader->upload($file, $filename);
+			}
+			$article->setImage($filename);
+			$entityManager = $this->getDoctrine()->getManager();
 			$entityManager->flush();
 			$this->addFlash('success', 'article modifié');
 			return $this->redirectToRoute('articles');

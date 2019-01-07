@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\AdminArticleType;
 use App\Entity\Article;
+use Symfony\Component\HttpFoundation\File\File;
 
 class AdminController extends AbstractController
 {
@@ -53,6 +54,10 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $article = $form->getData();
+            $file = $article->getImage();
+            $filename = md5(uniqid()) . '.' . $file->guessExtension();
+            $file->move($this->getParameter('article_image_directory'), $filename);
+            $article->setImage($filename);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($article);
             $entityManager->flush();
@@ -66,10 +71,20 @@ class AdminController extends AbstractController
     * @Route("/admin/article/update/{id}", name="updateArticleAdmin", requirements={"id"="\d+"})
     */
     public function updateArticleAdmin(Request $request, Article $article) {
+        $filename = $article->getImage();
+        if ($article->getImage()) {
+            $article->setImage(new File($this->getParameter('article_image_directory') . '/' . $filename));
+        }
         $form = $this->createForm(AdminArticleType::class, $article);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $article = $form->getData();
+            if ($article->getImage()) {
+                $file = $article->getImage();
+                $filename = md5(uniqid()) . '.' . $file->guessExtension();
+                $file->move($this->getParameter('article_image_directory'), $filename);
+            }
+            $article->setImage($filename);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
             $this->addFlash('success', 'article modifié');

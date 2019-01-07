@@ -20,7 +20,7 @@ class ArticleType extends AbstractType
             ->add('title', TextType::class, ['label'=>'Intitulé de l\'article'])
             ->add('content', TextareaType::class, ['label'=>'Contenu de l\'article'])
             ->add('categorie', EntityType::class, ['class' => Categorie::class, 'choice_label' => 'libelle'])
-            ->add('image', FileType::class)
+            ->add('image', FileType::class, ['required' => false])
         ;
     }
 
