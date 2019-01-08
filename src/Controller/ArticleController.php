@@ -138,6 +138,9 @@ class ArticleController extends AbstractController
 	    if (!$article) {
 			throw $this->createNotFoundException('No article found');
 		}
+
+		$this->denyAccessUnlessGranted('edit', $article, 'Vous ne pouvez pas modifier cet article');
+
 		// je stocke le nom du fichier image au cas où aucun fichier n'ait été envoyé
 		$filename = $article->getImage();
 		// on remplace le nom du fichier image par une instance de file représentant le fichier pour pouvoir générer le formulaire
@@ -175,6 +178,9 @@ class ArticleController extends AbstractController
 	// en objet de classe Article en mettant le nom de la classe dans les parenthèses
 	// Il n'est plus utile de faire le getRepository/find
 	public function deleteArticle(Article $article) {
+
+		$this->denyAccessUnlessGranted('delete', $article, 'Vous ne pouvez pas supprimer cet article');
+
 		// récupération de l'entity manager, nécessaire pour la suppression
 		$entityManager = $this->getDoctrine()->getManager();
 		// je veux supprimer cet article
