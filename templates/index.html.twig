@@ -40,7 +40,61 @@
 
 	<p>Bonjour {{nom}}</p>
 
+	<div class="row">
+		<div class="col-md-4">
+			<select id="auteur" class="form-group">
+				<option value="0">Choisissez un auteur</option>
+				{% for user in users %}
+					<option value="{{ user.id }}">{{ user.username }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="col-md-4" id="result1">
+		</div>		
+		<div class="col-md-4" id="result2">
+		</div>
+	</div>
+
 {% endblock %}
+
+
+{% block javascripts %}
+	
+	{{ parent() }}
+
+	<script>
+
+		$('#auteur').on('change', function() {
+			let idAuteur = $(this).val();
+			$.ajax({
+				type: 'post',
+				url: '{{ path("auteur1") }}',
+				data: 'idAuteur=' + idAuteur,
+				datatype: 'html',
+				success: function(result) {
+					$('#result1').html(result);
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			})
+		})
+
+		// faire une deuxième route ajax en get qui matche ajax/auteur2/{id}
+		// {id} est l'id de l'auteur
+		$('#auteur').on('change', function() {
+			let idAuteur = $(this).val();
+			$.ajax({
+				type: 'get',
+				url: '{{ path("auteur2") }}' ~ idAuteur,
+				datatype: 'json',
+				
+			})
+		})
+
+	</script>
+
+{% endblock %}	
 
 
 
