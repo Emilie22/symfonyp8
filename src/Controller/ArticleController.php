@@ -64,7 +64,7 @@ class ArticleController extends AbstractController
     		// $article->getImage() contient un objet qui représente le fichier image envoyé
     		$file = $article->getImage();
 
-    		$filename = $file ? $fileuploader->upload($file) : '';
+    		$filename = $file ? $fileuploader->upload($file, $this->getParameter('article_image_directory')) : '';
 
     		// je remplace l'attribut image qui contient toujours le fichier par le nom du fichier
     		$article->setImage($filename);
@@ -142,7 +142,7 @@ class ArticleController extends AbstractController
 		$filename = $article->getImage();
 		// on remplace le nom du fichier image par une instance de file représentant le fichier pour pouvoir générer le formulaire
 		if ($article->getImage()) {
-			$article->setImage(new File($this->getParameter('article_image_directory') . '/' . $filename));
+			$article->setImage(new File($this->getParameter('upload_directory') . $this->getParameter('article_image_directory') . '/' . $filename));
 		}
 		$form = $this->createForm(ArticleUserType::class, $article);
 		$form->handleRequest($request);
@@ -152,7 +152,7 @@ class ArticleController extends AbstractController
 			if ($article->getImage()) {
 				// je récupère le fichier 
 				$file = $article->getImage();
-				$filename = $fileuploader->upload($file, $filename);
+				$filename = $fileuploader->upload($file, $this->getParameter('article_image_directory'), $filename);
 			}
 			$article->setImage($filename);
 			$entityManager = $this->getDoctrine()->getManager();
