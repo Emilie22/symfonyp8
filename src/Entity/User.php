@@ -59,10 +59,16 @@ class User implements UserInterface
      */
     private $photo;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
+     */
+    private $comments;
+
     public function __construct() {
         // on initialise la propriété articles lors de l'instanciation
         // ArrayCollection se comporte comme un tableau
         $this->articles = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,4 +184,13 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
 }

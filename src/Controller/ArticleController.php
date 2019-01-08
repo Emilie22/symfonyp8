@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Form\ArticleUserType;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Service\FileUploader;
+use App\Form\CommentType;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ArticleController extends AbstractController
 {
@@ -87,14 +89,33 @@ class ArticleController extends AbstractController
 	/**
 	* @Route("/article/article{id}", name="showArticle", requirements={"id"="\d+"})
 	*/
-	public function showArticle($id) {
-		$repository = $this->getDoctrine()->getRepository(Article::class);
-		$article = $repository->find($id);
+	public function showArticle(Article $article, Request $request) {
+		//$repository = $this->getDoctrine()->getRepository(Article::class);
+		//$article = $repository->find($id);
 		// génération d'une erreur si aucun article n'est trouvé
 		if (!$article) {
 			throw $this->createNotFoundException('No article found');
 		}
-		return $this->render('article/article.html.twig', array('article'=>$article));
+
+		$form = $this->createForm(CommentType::class);
+		// si on veut restreindre l'ajout de commentaire aux utilisateurs connectés
+		$user = $this->getUser();
+		if ($user instanceof UserInterface) { // veut dire que je suis connecté
+			$form->handleRequest($request);
+			if ($form->isSubmitted() && $form->isValid()) {
+				$comment = $form->getData();
+				// l'auteur est l'utilisateur connecté
+				$comment->setUser($this->getUser());
+				// l'article est celui sur lequel on est
+				$comment->setArticle($article);
+				$comment->setDatePubli(new \DateTime(date('Y-m-d H:i:s')));
+				$entityManager = $this->getDoctrine()->getManager();
+				$entityManager->persist($comment);
+				$entityManager->flush();
+				$this->addFlash('success', 'commentaire ajouté');
+			}
+		}
+		return $this->render('article/article.html.twig', array('article'=>$article, 'form'=>$form->createView()));
 	}
 
 
