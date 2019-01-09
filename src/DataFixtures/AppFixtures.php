@@ -8,6 +8,7 @@ use App\Entity\Categorie;
 use App\Entity\Article;
 use App\Entity\Message;
 use App\Entity\User;
+use App\Entity\Tag;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
@@ -48,6 +49,16 @@ class AppFixtures extends Fixture
             $users[] = $user;
         }
 
+        // je crée un tableau de tags
+        $tags = ['bon', 'mauvais', 'pas mal', 'moyen', 'brillant', 'sympa', 'naze', 'bof', 'exceptionnel', 'stupide'];
+        foreach($tags as $nom) {
+            $tag = new Tag();
+            $tag->setLibelle($nom);
+            $manager->persist($tag);
+            // je remplis un tableau de tags
+            $tagTab[] = $tag;
+        }
+
         // je crée un tableau vide $categories
         $categories = [];
         // on va créer 10 catégories
@@ -63,8 +74,14 @@ class AppFixtures extends Fixture
             $categories[] = $categorie;
         }
 
+        // on crée un tableau qui va référencer les tags liés aux articles
+        $tagsAlreadyLinked = [];
+
         // on va créer 50 articles
         for ($i = 1; $i <= 50; $i++) {
+
+            $tagsAlreadyLinked[$i] = [];
+
         	$article = new Article();
         	$article->setTitle('titre' . $i);
         	$article->setContent('contenu' . $i);
@@ -78,6 +95,19 @@ class AppFixtures extends Fixture
             $article->setUser($users[array_rand($users)]);
         	$article->setCategorie($categories[array_rand($categories)]);
             $article->setImage('');
+
+            // association avec les tags
+            $nb = rand(0,5); // au hasard le nb de tags associés à l'article
+            for ($j = 1; $j <= $nb; $j++) {
+                // je récupère au hasard un tag pour chaque tour de boucle
+                $tag = $tagTab[array_rand($tagTab)];
+                // s'il n'est pas déjà lié à cet article, on le rajoute
+                if (!in_array($tag, $tagsAlreadyLinked[$i])) {
+                    // je mémorise le fait que ce tag est lié à cet article
+                    $tagsAlreadyLinked[$i][] = $tag;
+                    $article->addTag($tag);
+                }
+            }
 
         	$manager->persist($article);
         }

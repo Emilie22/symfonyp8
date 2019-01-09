@@ -25,6 +25,12 @@
 				dans la catégorie <a href="{{ path('showCategorie', {id : article.categorie.id }) }}">{{ article.categorie.libelle }}</a>
 				<p>{{ article.content }}</p>
 			</article>
+			<div>
+				{# affichage de la liste des tags associés à cet article #}
+				{% for tag in article.tags %}
+					<span class="badge badge-info">{{ tag.libelle }}</span>
+				{% endfor %}
+			</div>
 		</div>
 	</div>
 
@@ -47,7 +53,7 @@
 			{% endfor %}
 
 			{% for comment in article.comments %}
-				<p>{{ comment.content }}</p>
+				<p>{{ comment.content|truncate(20, true, "...voir plus") }}</p>
 				<p>publié le {{ comment.datepubli|date('d/m/Y à H\hi') }} par {{ comment.user.username}}
 				{# je n'affiche l'icône de suppression que si je suis l'auteur du commentaire ou si je suis admin #}
 				{% if app.user is same as (comment.user) or is_granted('ROLE_ADMIN') %}

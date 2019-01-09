@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use App\Service\FileUploader;
 use App\Form\CommentType;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\Comment;
 
 class ArticleController extends AbstractController
 {
@@ -136,6 +137,13 @@ class ArticleController extends AbstractController
 				// l'article est celui sur lequel on est
 				$comment->setArticle($article);
 				$comment->setDatePubli(new \DateTime(date('Y-m-d H:i:s')));
+
+				$commentRepository = $this->getDoctrine()->getRepository(Comment::class);
+				$commentsSpam = $commentRepository->antispam($this->getUser(), new \DateTime(date('Y-m-d H:i:s')));
+				if (count($commentsSpam) > 4) {
+					throw new \Exception('Attendez une minute');
+				}
+
 				$entityManager = $this->getDoctrine()->getManager();
 				$entityManager->persist($comment);
 				$entityManager->flush();

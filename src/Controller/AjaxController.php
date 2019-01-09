@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
 use App\Entity\Article;
 use App\Entity\Categorie;
+use App\Service\JsonArticleGenerator;
 
 class AjaxController extends AbstractController
 {
@@ -33,9 +34,9 @@ class AjaxController extends AbstractController
     /**
     * @Route("/ajax/auteur2/{id}", name="auteur2", requirements={"id"="\d+"})
     */
-    public function auteur2(User $user) {
+    public function auteur2(User $user, JsonArticleGenerator $jsonArticleGenerator) {
     	$articles = $this->getDoctrine()->getRepository(Article::class)->findByUser($user);
-    	$result = [];
+    	/*$result = [];
     	foreach ($articles as $article) {
     		$result[] = ['title' => $article->getTitle(),
     					'date_publi' => $article->getDatePubli()->format('d/m/Y'),
@@ -43,7 +44,8 @@ class AjaxController extends AbstractController
     					'content' => $article->getContent(),
     					'url' => $this->generateUrl('showArticle', ['id' => $article->getId()])
     					];
-    	}
+    	}*/
+    	$result = $jsonArticleGenerator->generateResult($articles);
     	// renvoi d'une réponse au format json
     	return $this->json(['status' => 'ok', 'articles' => $result]);
     }
@@ -51,9 +53,9 @@ class AjaxController extends AbstractController
     /**
     * @Route("ajax/categorie/{id}", name="ajaxCategorie", requirements={"id"="\d+"})
     */
-    public function categorie(Categorie $categorie) {
+    public function categorie(Categorie $categorie, JsonArticleGenerator $jsonArticleGenerator) {
     	$articles = $this->getDoctrine()->getRepository(Article::class)->findByCategorie($categorie);
-    	$result = [];
+    	/*$result = [];
     	foreach ($articles as $article) {
     		$result[] = ['title' => $article->getTitle(),
     					'date_publi' => $article->getDatePubli()->format('d/m/Y'),
@@ -61,7 +63,8 @@ class AjaxController extends AbstractController
     					'content' => $article->getContent(),
     					'url' => $this->generateUrl('showArticle', ['id' => $article->getId()])
     					];
-    	}
+    	}*/
+    	$result = $jsonArticleGenerator->generateResult($articles);
     	return $this->json(['status' => 'ok', 'articles' => $result]);
     }
 
