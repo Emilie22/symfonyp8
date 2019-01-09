@@ -40,6 +40,7 @@ class AppFixtures extends Fixture
         	$plainPassword = 'toto';
         	$mdpencoded = $this->encoder->encodePassword($user, $plainPassword);
         	$user->setPassword($mdpencoded);
+            $user->setPhoto('');
 
         	$manager->persist($user);
 
@@ -76,6 +77,7 @@ class AppFixtures extends Fixture
         	// array_rand choisit au hasard une clé dans un tableau (le tableau $users ou $categories)
             $article->setUser($users[array_rand($users)]);
         	$article->setCategorie($categories[array_rand($categories)]);
+            $article->setImage('');
 
         	$manager->persist($article);
         }

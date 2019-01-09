@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
+use App\Entity\Categorie;
 
 // pour pouvoir utiliser la méthode render et autres méthodes utiles
 // on hérite de la classe AbstractController
@@ -45,13 +46,16 @@ class HomeController extends AbstractController {
 		$repository = $this->getDoctrine()->getRepository(User::class);
 		$users = $repository->findAll();
 
+		$repository = $this->getDoctrine()->getRepository(Categorie::class);
+		$categories = $repository->findAll();
+
 		$pseudo = 'Emilie';
 		// Symfony va chercher les vues dans /templates
 		// je peux passer des variables en paramètre à ma vue twig
 		// grâce à un tableau qui contient en clé les noms des paramètres, 
 		// et en valeur leurs valeurs
 		// sur index.html.twig la variable nom sera accessible
-		return $this->render('index.html.twig', ['nom'=>$pseudo, 'users'=>$users]);
+		return $this->render('index.html.twig', ['nom'=>$pseudo, 'users'=>$users, 'categories'=>$categories]);
 	}	
 
 	// Exercice 2 : Créer une page  pour l'url /exercice2/heure

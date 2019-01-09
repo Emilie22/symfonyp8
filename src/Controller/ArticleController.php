@@ -120,6 +120,33 @@ class ArticleController extends AbstractController
 
 
 	/**
+	* route qui va afficher les détails d'un article grâce au slug
+	* @Route("/article/{slug}", name="showArticleSlug", requirements={"slug"="[a-z0-9-_:]+"})
+	*/
+	public function showArticleSlug(Article $article, Request $request) {
+		$form = $this->createForm(CommentType::class);
+		// si on veut restreindre l'ajout de commentaire aux utilisateurs connectés
+		$user = $this->getUser();
+		if ($user instanceof UserInterface) { // veut dire que je suis connecté
+			$form->handleRequest($request);
+			if ($form->isSubmitted() && $form->isValid()) {
+				$comment = $form->getData();
+				// l'auteur est l'utilisateur connecté
+				$comment->setUser($this->getUser());
+				// l'article est celui sur lequel on est
+				$comment->setArticle($article);
+				$comment->setDatePubli(new \DateTime(date('Y-m-d H:i:s')));
+				$entityManager = $this->getDoctrine()->getManager();
+				$entityManager->persist($comment);
+				$entityManager->flush();
+				$this->addFlash('success', 'commentaire ajouté');
+			}
+		}
+		return $this->render('article/article.html.twig', array('article'=>$article, 'form'=>$form->createView()));
+	}
+
+
+	/**
 	* @Route("/article/recent", name="showRecentArticles")
 	*/
 	public function showRecent() {

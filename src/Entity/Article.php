@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
@@ -63,6 +64,12 @@ class Article
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article")
      */
     private $comments;
+
+    /**
+    * @Gedmo\Slug(fields={"title"})
+    * @ORM\Column(length=128, unique=true)
+    */
+    private $slug;
 
     public function __construct()
     {
@@ -175,5 +182,9 @@ class Article
         }
 
         return $this;
+    }
+
+    public function getSlug(): ?string {
+        return $this->slug;
     }
 }

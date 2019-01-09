@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
 use App\Entity\Article;
+use App\Entity\Categorie;
 
 class AjaxController extends AbstractController
 {
@@ -46,4 +47,22 @@ class AjaxController extends AbstractController
     	// renvoi d'une réponse au format json
     	return $this->json(['status' => 'ok', 'articles' => $result]);
     }
+
+    /**
+    * @Route("ajax/categorie/{id}", name="ajaxCategorie", requirements={"id"="\d+"})
+    */
+    public function categorie(Categorie $categorie) {
+    	$articles = $this->getDoctrine()->getRepository(Article::class)->findByCategorie($categorie);
+    	$result = [];
+    	foreach ($articles as $article) {
+    		$result[] = ['title' => $article->getTitle(),
+    					'date_publi' => $article->getDatePubli()->format('d/m/Y'),
+    					'author' => $article->getUser()->getUsername(),
+    					'content' => $article->getContent(),
+    					'url' => $this->generateUrl('showArticle', ['id' => $article->getId()])
+    					];
+    	}
+    	return $this->json(['status' => 'ok', 'articles' => $result]);
+    }
+
 }

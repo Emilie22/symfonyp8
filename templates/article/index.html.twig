@@ -20,6 +20,7 @@
 			{# ici title et datepubli sont les getter #}
 			{# datepubli est un objet #}
 			<a href="{{ path('showArticle', {id: article.id}) }}">Voir</a>
+			<a href="{{ path('showArticleSlug', {slug: article.slug}) }}">Voir avec slug</a>
 			<a href="{{ path('updateArticle', {id: article.id}) }}">Modifier</a>
 			<a href="{{ path('deleteArticle', {id: article.id}) }}">Supprimer</a>
 		</article>

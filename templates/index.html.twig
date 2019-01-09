@@ -42,7 +42,7 @@
 
 	<div class="row">
 		<div class="col-md-4">
-			<select id="auteur" class="form-group">
+			<select id="auteur" class="form-control">
 				<option value="0">Choisissez un auteur</option>
 				{% for user in users %}
 					<option value="{{ user.id }}">{{ user.username }}</option>
@@ -53,6 +53,19 @@
 		</div>		
 		<div class="col-md-4" id="result2">
 		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-4">
+			<select id="categorie" class="form-control">
+				<option value="0">Choisissez une catégorie</option>
+				{% for categorie in categories %}
+					<option value="{{ categorie.id }}">{{ categorie.libelle }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="col-md-4" id="result3">
+		</div>		
 	</div>
 
 {% endblock %}
@@ -104,6 +117,28 @@
 				}
 			})
 			
+		})
+
+		$('#categorie').on('change', function() {
+			let idCategorie = $(this).val();
+			let path2 = '{{ path("ajaxCategorie", {id:0}) }}';
+			path2 = path2.replace(0, idCategorie);
+			$.ajax({
+				type: 'get',
+				url: path2,
+				datatype: 'json',
+				success: function(json) {
+					if (json.status === 'ok') {
+						$('#result3').empty();
+						$.each(json.articles, function (i, article) {
+							$('#result3').append($('<article>').html(article.title + ' publié le ' + article.date_publi + ', <a href="'+ article.url +'">voir</a>' ));
+						})
+					}					
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			})
 		})
 
 
