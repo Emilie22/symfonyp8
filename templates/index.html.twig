@@ -78,19 +78,35 @@
 					console.log(error);
 				}
 			})
-		})
 
-		// faire une deuxième route ajax en get qui matche ajax/auteur2/{id}
-		// {id} est l'id de l'auteur
-		$('#auteur').on('change', function() {
-			let idAuteur = $(this).val();
+			// faire une deuxième route ajax en get qui matche ajax/auteur2/{id}
+			// {id} est l'id de l'auteur
+			// je génère ma route avec un id 0
+			let path = '{{ path("auteur2", {id:0}) }}';
+			// lorsque l'utilisateur choisit un auteur, je remplace l'id 0 par le bon id
+			path = path.replace(0, idAuteur);
+			console.log(path);
 			$.ajax({
 				type: 'get',
-				url: '{{ path("auteur2") }}' ~ idAuteur,
+				url: path,
 				datatype: 'json',
-				
+				success: function(json) {
+					//console.log(json)
+					if (json.status === 'ok') {
+						$('#result2').empty();
+						$.each(json.articles, function (i, article) {
+							$('#result2').append($('<article>').html(article.title + ' publié le ' + article.date_publi + ', <a href="'+ article.url +'">voir</a>' ));
+						})
+					}
+				},
+				error: function(error) {
+					console.log(error);
+				}
 			})
+			
 		})
+
+
 
 	</script>
 

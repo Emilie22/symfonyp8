@@ -28,4 +28,22 @@ class AjaxController extends AbstractController
 
         return $this->render('ajax/articles.html.twig', ['articles'=>$articles]);
     }
+
+    /**
+    * @Route("/ajax/auteur2/{id}", name="auteur2", requirements={"id"="\d+"})
+    */
+    public function auteur2(User $user) {
+    	$articles = $this->getDoctrine()->getRepository(Article::class)->findByUser($user);
+    	$result = [];
+    	foreach ($articles as $article) {
+    		$result[] = ['title' => $article->getTitle(),
+    					'date_publi' => $article->getDatePubli()->format('d/m/Y'),
+    					'author' => $article->getUser()->getUsername(),
+    					'content' => $article->getContent(),
+    					'url' => $this->generateUrl('showArticle', ['id' => $article->getId()])
+    					];
+    	}
+    	// renvoi d'une réponse au format json
+    	return $this->json(['status' => 'ok', 'articles' => $result]);
+    }
 }
